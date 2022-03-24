@@ -3,29 +3,27 @@
  The SHA256withRSA Algorithm with GUI
 
 ![](https://img.shields.io/badge/dependencies-python%203.9-blue)
-![](https://img.shields.io/badge/OS-windows%2010-lightgrey)
-
 
 ## Introduction
 
-<img src="https://user-images.githubusercontent.com/41314224/121566185-d46be500-ca4f-11eb-9e68-6cc519dd206c.png" width="360" height="600" alt="screenshot">
+It is a web-based GUI for SHA256withRSA operations as follows. It automatically starts service at localhost. Neither does it rely on the public webserver, nor does it rely on the GUI interface of the operational system.
 
-## Functions
+**Verify signature**: 
+Given the content and signature, use the public key to verify if the signature is valid.
 
-1. Generate RSA keypair. Public key's extension is `*.pub`; private key doesn't have an extension name.
-2. Sign for a message.
-3. Verify if a message from the private key holder is valid.
+**Generate**:
+Generate a SHA256withRSA keypair, including a public key and a private key.
+
+**Sign**:
+Given the content, use the private key to sign it.
 
 ## Usage
 
-### 1. For compiling
+**End user**: Download from the latest release, unzip and run `main.exe`.
 
-Run `pip install -r requirements` to install the dependent packages.
+**Developer**:
 
-Run `pyinstaller -F -w main.py` to generate executable program in `dist` folder.
-
-### 2. For directly using
-
-This software is designed at 1080p screen size. It will adapt to the system zoom. If you cannot see the text on buttons clearly, the software may not be suitable for your screen.
-
-To start with, please get the latest release in this repository and run `main.exe`.
+```bash
+pip install -r requirements.txt
+pyinstaller --noconsole main.spec
+```
