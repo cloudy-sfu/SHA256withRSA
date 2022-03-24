@@ -25,5 +25,5 @@ Given the content, use the private key to sign it.
 
 ```bash
 pip install -r requirements.txt
-pyinstaller --noconsole main.spec
+pyinstaller main.spec
 ```
