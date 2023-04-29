@@ -48,7 +48,7 @@
                 <a style="text-decoration: none; color: black;" href="/?app=sign">
                     <div class="bd-callout bd-callout-warning">
                         <b>Sign</b> <br>
-                        <i>require private key, message</i> <br>
+                        <i>require private key</i> <br>
                         Sign your message, so the recipient can trust that the message is sent from you.
                     </div>
                 </a>
@@ -57,8 +57,17 @@
                 <a style="text-decoration: none; color: black;" href="/?app=verify">
                     <div class="bd-callout bd-callout-warning">
                         <b>Verify</b> <br>
+                        <i>require public key, signature</i> <br>
                         When you hold the public key and receive a signed message, this application
                         verifies if the signature of the message is valid.
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a style="text-decoration: none; color: black;" href="/?app=generate">
+                    <div class="bd-callout">
+                        <b>Generate</b> <br>
+                        Generate a new RSA keypair.
                     </div>
                 </a>
             </div>
@@ -68,6 +77,7 @@
                 <a style="text-decoration: none; color: black;" href="/?app=encrypt">
                     <div class="bd-callout bd-callout-success">
                         <b>Encrypt</b> <br>
+                        <i>require public key</i> <br>
                         When you hold the public key, this application encrypts the message, so only the holder of
                         the private key can decrypt your message.
                     </div>
@@ -77,18 +87,9 @@
                 <a style="text-decoration: none; color: black;" href="/?app=decrypt">
                     <div class="bd-callout bd-callout-success">
                         <b>Decrypt</b> <br>
+                        <i>require private key</i> <br>
                         When you hold the private key and a message which is encrypted by your public key, this
                         application decrypt the message.
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <a style="text-decoration: none; color: black;" href="/?app=generate">
-                    <div class="bd-callout">
-                        <b>Generate</b> <br>
-                        Generate a new RSA keypair.
                     </div>
                 </a>
             </div>

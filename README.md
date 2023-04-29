@@ -14,6 +14,10 @@ It is a web-based GUI for SHA256withRSA operations as follows.
 
 It automatically starts service at localhost.
 
+Screenshot:
+
+![Snipaste_2023-04-30_19-21-43](assets/Snipaste_2023-04-30_19-21-43.png)
+
 ## Usage
 
 **End user**: Download from the latest release, unzip and run `SHA256withRSA.exe`.
