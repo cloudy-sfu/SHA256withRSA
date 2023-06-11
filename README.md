@@ -12,19 +12,32 @@ It is a web-based GUI for SHA256withRSA operations as follows.
 -   Encrypt and decrypt messages
 -   Sign messages and verify signatures
 
-It automatically starts service at localhost.
-
-Screenshot:
-
-![Snipaste_2023-04-30_19-21-43](assets/Snipaste_2023-04-30_19-21-43.png)
+<details>
+    <summary><b>Screenshot</b></summary>
+    <img src="assets/Picture1.png" />
+</details>
 
 ## Usage
 
-**End user**: Download from the latest release, unzip and run `SHA256withRSA.exe`.
+**Source code:**
 
-**Developer**:
+1. Set the project root as the current folder in terminal. 
 
-```bash
-pip install -r requirements.txt
-pyinstaller main.spec
-```
+2. Activate Python virtual environment if applicable.
+
+3. Run the following script. 
+
+   ```bash
+   pip install -r requirements.txt
+   python -m flask run 
+   ```
+
+It occupies localhost 5000 port by default.
+
+- [Customize host of Flask application](https://flask.palletsprojects.com/en/2.3.x/quickstart/)
+- [Customize port of Flask application](https://flask.palletsprojects.com/en/2.3.x/server/#address-already-in-use)
+
+**Release:**
+
+1. Download and unzip the release.
+2. Open `SHA256withRSA.exe`.
