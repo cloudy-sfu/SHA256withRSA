@@ -1,37 +1,17 @@
-import pywebio
-import sha256withrsa
+from flask import Flask, render_template
+from pywebio.platform.flask import webio_view
+import webbrowser, pywebio, sha256withrsa
 
-with open('html/main.html', 'r') as f:
-    html_main = f.read()
-with open('html/nav.html', 'r') as f:
-    html_nav = f.read()
+app = Flask(__name__)
 
 
-def validate_n(n):
-    if n < 1024:
-        return 'The number should be greater or equal to 1024.'
-
-
+@app.route('/')
 def index():
-    pywebio.output.clear()
-    pywebio.output.put_html(html_main)
-
-
-def generate():
-    pywebio.output.put_html(html_nav)
-    data = pywebio.input.input_group("Generate keypair", [
-        pywebio.input.input(label='Key name', name='filename', value='id_rsa', required=True),
-        pywebio.input.input(label='Complexity', name='n', value='2048', required=True, type='number',
-                            validate=validate_n, help_text='Minimum complexity is 1024.'),
-    ])
-    private_key, public_key = sha256withrsa.generate(n=data['n'])
-    pywebio.output.put_markdown('# Download')
-    pywebio.output.put_file(name=data['filename'], content=private_key, label='Private key')
-    pywebio.output.put_file(name=data['filename'] + '.pub', content=public_key, label='Public key')
+    return render_template('main.html')
 
 
 def sign():
-    pywebio.output.put_html(html_nav)
+    pywebio.output.put_link('Back', '/')
     data = pywebio.input.input_group("Sign message", [
         pywebio.input.textarea(label='Message', name='content', required=True),
         pywebio.input.file_upload(label='Private key', name='private', required=True),
@@ -46,7 +26,7 @@ def sign():
 
 
 def verify():
-    pywebio.output.put_html(html_nav)
+    pywebio.output.put_link('Back', '/')
     data = pywebio.input.input_group("Verify signature", [
         pywebio.input.textarea(label='Message', name='content', required=True),
         pywebio.input.textarea(label='Signature', name='signature', required=True),
@@ -63,7 +43,7 @@ def verify():
 
 
 def encrypt():
-    pywebio.output.put_html(html_nav)
+    pywebio.output.put_link('Back', '/')
     data = pywebio.input.input_group("Encrypt message", [
         pywebio.input.textarea(label='Message', name='content', required=True),
         pywebio.input.file_upload(label='Public key', name='public', required=True),
@@ -79,7 +59,7 @@ def encrypt():
 
 
 def decrypt():
-    pywebio.output.put_html(html_nav)
+    pywebio.output.put_link('Back', '/')
     data = pywebio.input.input_group("Decrypt message", [
         pywebio.input.textarea(label='Encrypted content', name='content', required=True,
                                help_text='Please paste everything inside the curly braces (including the curly braces '
@@ -94,9 +74,31 @@ def decrypt():
         pywebio.output.put_error('The message is corrupted, or the private key is invalid.')
 
 
+def validate_n(n):
+    if n < 1024:
+        return 'The number should be greater or equal to 1024.'
+
+
+def generate():
+    pywebio.output.put_link('Back', '/')
+    data = pywebio.input.input_group("Generate keypair", [
+        pywebio.input.input(label='Key name', name='filename', value='id_rsa', required=True),
+        pywebio.input.input(label='Complexity', name='n', value='2048', required=True, type='number',
+                            validate=validate_n, help_text='Minimum complexity is 1024.'),
+    ])
+    private_key, public_key = sha256withrsa.generate(n=data['n'])
+    pywebio.output.put_markdown('# Download')
+    pywebio.output.put_file(name=data['filename'], content=private_key, label='Private key')
+    pywebio.output.put_file(name=data['filename'] + '.pub', content=public_key, label='Public key')
+
+
+app.add_url_rule(rule='/sign', endpoint='sign', view_func=webio_view(sign), methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/verify', endpoint='verify', view_func=webio_view(verify), methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/encrypt', endpoint='encrypt', view_func=webio_view(encrypt), methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/decrypt', endpoint='decrypt', view_func=webio_view(decrypt), methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/generate', endpoint='generate', view_func=webio_view(generate), methods=['GET', 'POST', 'OPTIONS'])
+
+
 if __name__ == '__main__':
-    # Debug
-    # pywebio.start_server([index, generate, sign, verify, encrypt, decrypt], auto_open_webbrowser=False, port=5000,
-    #                      debug=True)
-    # Deploy
-    pywebio.start_server([index, generate, sign, verify, encrypt, decrypt], auto_open_webbrowser=True)
+    webbrowser.open_new_tab('http://localhost:5000')
+    app.run()

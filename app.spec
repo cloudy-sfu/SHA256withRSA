@@ -5,10 +5,10 @@ block_cipher = None
 
 
 a = Analysis(
-    ['main.py'],
+    ['app.py'],
     pathex=[],
-    binaries=[('venv/Lib/site-packages/pywebio', 'pywebio')],
-    datas=[('html', 'html')],
+    binaries=[('templates', 'templates')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -46,5 +46,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='main',
+    name='app',
 )
