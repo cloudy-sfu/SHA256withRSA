@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from pywebio.platform.flask import webio_view
 import webbrowser, pywebio, sha256withrsa
+import socket
 
 app = Flask(__name__)
 
@@ -21,8 +22,8 @@ def sign():
     if signature:
         pywebio.output.put_text(signature)
     else:
-        pywebio.output.put_error('The private key is invalid. This error may also appear if you use a public key '
-                                 'to sign a message.')
+        pywebio.output.put_error('The private key is invalid. This error may also '
+                                 'appear if you use a public key to sign a message.')
 
 
 def verify():
@@ -36,10 +37,12 @@ def verify():
                                   public_key=data['public']['content'])
     pywebio.output.put_markdown('# Result')
     if result:
-        pywebio.output.put_success("VALID. This message is from the holder of the corresponding private key.")
+        pywebio.output.put_success("VALID. This message is from the holder of the "
+                                   "corresponding private key.")
     else:
-        pywebio.output.put_error("INVALID. This signature does not match the message, or is not generated from"
-                                 "the corresponding private key which pairs your public key.")
+        pywebio.output.put_error("INVALID. This signature does not match the message, "
+                                 "or is not generated from the corresponding private key "
+                                 "which pairs your public key.")
 
 
 def encrypt():
@@ -50,8 +53,8 @@ def encrypt():
     ])
     encrypted_content = sha256withrsa.encrypt(data['content'], data['public']['content'])
     pywebio.output.put_markdown('# Encrypted content')
-    pywebio.output.put_html('<p style="color: red"><i>Please send everything inside the curly braces (including the '
-                            'curly braces themselves) to your contact.</i></p>')
+    pywebio.output.put_html('<p style="color: red"><i>Please send everything below to '
+                            'your contact.</i></p>')
     if encrypted_content:
         pywebio.output.put_text(encrypted_content)
     else:
@@ -62,8 +65,7 @@ def decrypt():
     pywebio.output.put_link('Back', '/')
     data = pywebio.input.input_group("Decrypt message", [
         pywebio.input.textarea(label='Encrypted content', name='content', required=True,
-                               help_text='Please paste everything inside the curly braces (including the curly braces '
-                                         'themselves) here.'),
+                               help_text='Please paste everything received here.'),
         pywebio.input.file_upload(label='Private key', name='public', required=True),
     ])
     message = sha256withrsa.decrypt(data['content'], data['public']['content'])
@@ -71,7 +73,8 @@ def decrypt():
     if message:
         pywebio.output.put_text(message)
     else:
-        pywebio.output.put_error('The message is corrupted, or the private key is invalid.')
+        pywebio.output.put_error('The message is corrupted, or the private key is '
+                                 'invalid.')
 
 
 def validate_n(n):
@@ -82,23 +85,46 @@ def validate_n(n):
 def generate():
     pywebio.output.put_link('Back', '/')
     data = pywebio.input.input_group("Generate keypair", [
-        pywebio.input.input(label='Key name', name='filename', value='id_rsa', required=True),
-        pywebio.input.input(label='Complexity', name='n', value='2048', required=True, type='number',
-                            validate=validate_n, help_text='Minimum complexity is 1024.'),
+        pywebio.input.input(label='Key name', name='filename', value='id_rsa',
+                            required=True),
+        pywebio.input.input(label='Complexity', name='n', value='2048', required=True,
+                            type='number', validate=validate_n,
+                            help_text='Minimum complexity is 1024.'),
     ])
     private_key, public_key = sha256withrsa.generate(n=data['n'])
     pywebio.output.put_markdown('# Download')
-    pywebio.output.put_file(name=data['filename'], content=private_key, label='Private key')
-    pywebio.output.put_file(name=data['filename'] + '.pub', content=public_key, label='Public key')
+    pywebio.output.put_file(name=data['filename'] + '.pem', content=private_key,
+                            label='Private key')
+    pywebio.output.put_file(name=data['filename'] + '.pub', content=public_key,
+                            label='Public key')
 
 
-app.add_url_rule(rule='/sign', endpoint='sign', view_func=webio_view(sign), methods=['GET', 'POST', 'OPTIONS'])
-app.add_url_rule(rule='/verify', endpoint='verify', view_func=webio_view(verify), methods=['GET', 'POST', 'OPTIONS'])
-app.add_url_rule(rule='/encrypt', endpoint='encrypt', view_func=webio_view(encrypt), methods=['GET', 'POST', 'OPTIONS'])
-app.add_url_rule(rule='/decrypt', endpoint='decrypt', view_func=webio_view(decrypt), methods=['GET', 'POST', 'OPTIONS'])
-app.add_url_rule(rule='/generate', endpoint='generate', view_func=webio_view(generate), methods=['GET', 'POST', 'OPTIONS'])
+def find_available_port(start_port):
+    tries = 100  # try times
+    for i in range(tries):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.bind(("127.0.0.1", start_port + i))
+            s.close()
+            return start_port + i
+        except OSError:
+            pass
+    raise Exception(f"Tried {tries} times, no available port from {start_port} to "
+                    f"{start_port + tries}.")
 
+
+app.add_url_rule(rule='/sign', endpoint='sign', view_func=webio_view(sign),
+                 methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/verify', endpoint='verify', view_func=webio_view(verify),
+                 methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/encrypt', endpoint='encrypt', view_func=webio_view(encrypt),
+                 methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/decrypt', endpoint='decrypt', view_func=webio_view(decrypt),
+                 methods=['GET', 'POST', 'OPTIONS'])
+app.add_url_rule(rule='/generate', endpoint='generate', view_func=webio_view(generate),
+                 methods=['GET', 'POST', 'OPTIONS'])
 
 if __name__ == '__main__':
-    webbrowser.open_new_tab('http://localhost:5000')
-    app.run()
+    port = find_available_port(5000)
+    webbrowser.open_new_tab(f'http://localhost:{port}')
+    app.run(port=port)
