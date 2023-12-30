@@ -97,7 +97,7 @@ def decrypt(content, private_key):
         return
     try:
         session_key = cipher_rsa.decrypt(encrypted_session_key)
-    except AttributeError:
+    except (AttributeError, ValueError):
         return
     # Decrypt the data with the AES session key
     cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)

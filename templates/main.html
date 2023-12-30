@@ -26,29 +26,15 @@
     <title>SHA256 with RSA</title>
 </head>
 <body class="d-flex flex-column" style="height: 100vh;">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="/">Home</a>
-                    <a class="nav-link" href="https://github.com/cloudy-sfu" target="_blank">About</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div class="container-md my-2 flex-fill">
-        <p class="fw-bold text-center">SHA256 with RSA</p>
+    <div class="container-md mb-2 flex-fill">
+        <p class="fw-bold text-center alert mb-0">SHA256 with RSA</p>
         <div class="row">
             <div class="col-md-4">
                 <a style="text-decoration: none; color: black;" href="/sign">
                     <div class="bd-callout bd-callout-warning" id="sign">
                         <b>Sign</b> <br>
-                        <i>require private key</i> <br>
-                        Sign your message, so the recipient can trust that the message is sent from you.
+                        <i>with private key</i> <br>
+                        Sign your message, to prove you are the message sender.
                     </div>
                 </a>
             </div>
@@ -56,9 +42,8 @@
                 <a style="text-decoration: none; color: black;" href="/verify">
                     <div class="bd-callout bd-callout-warning" id="verify">
                         <b>Verify</b> <br>
-                        <i>require public key, signature</i> <br>
-                        When you hold the public key and receive a signed message, this application
-                        verifies if the signature of the message is valid.
+                        <i>with public key, signature</i> <br>
+                        Verify the signature of the message is valid.
                     </div>
                 </a>
             </div>
@@ -66,7 +51,7 @@
                 <a style="text-decoration: none; color: black;" href="/generate">
                     <div class="bd-callout" id="generate">
                         <b>Generate</b> <br>
-                        Generate a new RSA keypair.
+                        Generate a new RSA keypair in PEM format.
                     </div>
                 </a>
             </div>
@@ -76,9 +61,9 @@
                 <a style="text-decoration: none; color: black;" href="/encrypt">
                     <div class="bd-callout bd-callout-success" id="encrypt">
                         <b>Encrypt</b> <br>
-                        <i>require public key</i> <br>
-                        When you hold the public key, this application encrypts the message, so only the holder of
-                        the private key can decrypt your message.
+                        <i>with public key</i> <br>
+                        Encrypt the message, can only be decrypted by
+                        corresponding private key.
                     </div>
                 </a>
             </div>
@@ -86,9 +71,9 @@
                 <a style="text-decoration: none; color: black;" href="/decrypt">
                     <div class="bd-callout bd-callout-success" id="decrypt">
                         <b>Decrypt</b> <br>
-                        <i>require private key</i> <br>
-                        When you hold the private key and a message which is encrypted by your public key, this
-                        application decrypt the message.
+                        <i>with private key</i> <br>
+                        Decrypt the message which was encrypted by the corresponding
+                        public key.
                     </div>
                 </a>
             </div>
@@ -110,10 +95,9 @@
                 element.setAttribute('style', 'height: ' + maxHeight + 'px;');
             }
         </script>
-
     </div>
-    <footer class="container-fluid my-2">
-        <p>&copy; cloudy-sfu, 2023. </p>
+    <footer class="container-fluid">
+        <p>&copy; cloudy-sfu 2023 </p>
     </footer>
 </body>
 </html>
