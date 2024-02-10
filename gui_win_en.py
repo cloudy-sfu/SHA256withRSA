@@ -87,17 +87,6 @@ def generate_gui():
         dpg.show_item("banner")
 
 
-def explain_charset_error():
-    dpg.set_value("message", "If you see question marks, do not panic. It is "
-                             "the display error because \"dearpygui\" uses ASCII charset "
-                             "instead of UTF-8 and does not support display of non-latin "
-                             "languages. If your file path includes non-latin characters, "
-                             "this error occur. However, we use UTF-8 string at backend, "
-                             "so it will not cause a problem and your files are saved at "
-                             "correct location.")
-    dpg.show_item("banner")
-
-
 def dpg_copy_wrapper(component):
     def dpg_copy():
         value = dpg.get_value(component)

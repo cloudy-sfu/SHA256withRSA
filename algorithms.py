@@ -51,12 +51,6 @@ def encrypt(content, public_key):
     # Encrypt a session key with the public RSA key
     cipher_rsa = PKCS1_OAEP.new(public_key)
     encrypted_session_key = cipher_rsa.encrypt(session_key)
-    # Raise error if using private key to encrypt
-    try:
-        cipher_rsa.decrypt(encrypted_session_key)
-        return
-    except TypeError:
-        pass
     # Encrypt the data with the AES session key
     cipher_aes = AES.new(session_key, AES.MODE_EAX)
     encrypted_message, tag = cipher_aes.encrypt_and_digest(content)
