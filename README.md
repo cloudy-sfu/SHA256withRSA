@@ -1,4 +1,4 @@
-# SHA256withRSA
+# SHA256 with RSA
 
  The SHA256withRSA Algorithm with GUI
 
@@ -26,9 +26,11 @@ It is a GUI for SHA256withRSA operations as follows.
 
 3. Run the following script. 
 
-   ```bash
+   ```shell
    pip install -r requirements.txt
-   python gui_win_en.py
+   pyinstaller gui_win_cn.spec
+   move dist\SHA256-with-RSA-CN\_internal\SourceHanSansCN-Regular.otf dist\SHA256-with-
+   RSA-CN\SourceHanSansCN-Regular.otf
    ```
 
 **Release:**
